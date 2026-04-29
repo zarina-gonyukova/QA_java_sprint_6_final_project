@@ -12,30 +12,27 @@ import static org.junit.Assert.assertEquals;
 @RunWith(Parameterized.class)
 public class FelineParameterizedTest {
 
-    private final String inputType;
-    private final String expectedSpecies;
+    private final int input;
+    private final int expected;
 
-    public FelineParameterizedTest(String inputType, String expectedSpecies) {
-        this.inputType = inputType;
-        this.expectedSpecies = expectedSpecies;
+    public FelineParameterizedTest(int input, int expected) {
+        this.input = input;
+        this.expected = expected;
     }
 
-    @Parameterized.Parameters(name = "type={0}, species={1}")
+    @Parameterized.Parameters
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
-                {"wild", "Panthera leo"},
-                {"domestic", "Felis catus"},
-                {"", "Felis catus"},
-                {null, "Felis catus"},
-                {"street", "Felis catus"}
+                {1, 1},
+                {2, 2},
+                {4, 4},
+                {7, 7}
         });
     }
 
     @Test
-    public void speciesDependsOnType() {
-        Feline feline = new Feline(inputType);
-        assertEquals(expectedSpecies, feline.getSpeciesName());
+    public void getKittensWithArgsReturnsExpectedNumber() {
+        Feline feline = new Feline();
+        assertEquals(expected, feline.getKittens(input));
     }
 }
-
-// Sprint 6

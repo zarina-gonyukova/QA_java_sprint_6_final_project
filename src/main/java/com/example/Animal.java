@@ -1,30 +1,22 @@
 package com.example;
 
+import java.util.List;
+
 public class Animal {
 
-    private static final String DEFAULT_FAMILY = "Животные";
-
-    private final String family;
-
-    public Animal() {
-        this(DEFAULT_FAMILY);
-    }
-
-    public Animal(String family) {
-        this.family = family;
+    public List<String> getFood(String animalKind) throws Exception {
+        if ("Травоядное".equals(animalKind)) {
+            return List.of("Трава", "Различные растения");
+        } else if ("Хищник".equals(animalKind)) {
+            return List.of("Животные", "Птицы", "Рыба");
+        } else {
+            throw new Exception(
+                    "Неизвестный вид животного, используйте значение Травоядное или Хищник"
+            );
+        }
     }
 
     public String getFamily() {
-        return family;
-    }
-
-    public int getKittens() {
-        return 1;
-    }
-
-    public int getKittens(int count) {
-        return count;
+        return "Животные";
     }
 }
-
-// Sprint 6

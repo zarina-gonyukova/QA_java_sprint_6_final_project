@@ -3,7 +3,5 @@ package com.example;
 import java.util.List;
 
 public interface Predator {
-    List<String> getMeatMenu();
+    List<String> eatMeat() throws Exception;
 }
-
-// Sprint 6

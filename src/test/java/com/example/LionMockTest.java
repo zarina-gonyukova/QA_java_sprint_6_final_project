@@ -1,42 +1,35 @@
 package com.example;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class LionMockTest {
 
-    @Mock
-    private Feline felineMock;
+    @Test
+    public void getFoodUsesPredatorEatMeat() throws Exception {
+        Predator predatorMock = mock(Predator.class);
+        when(predatorMock.eatMeat()).thenReturn(List.of("Животные"));
 
-    private AutoCloseable mocks;
+        Lion lion = new Lion(predatorMock, "Самец");
+        List<String> food = lion.getFood();
 
-    @Before
-    public void setUp() {
-        mocks = MockitoAnnotations.openMocks(this);
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        if (mocks != null) {
-            mocks.close();
-        }
+        assertEquals(List.of("Животные"), food);
+        verify(predatorMock, times(1)).eatMeat();
     }
 
     @Test
-    public void getKittensDelegatesToFeline() {
-        when(felineMock.getKittens()).thenReturn(1);
+    public void getKittensDelegatesToFelineWhenPredatorIsFeline() throws Exception {
+        Feline felineMock = mock(Feline.class);
+        when(felineMock.getKittens()).thenReturn(3);
 
-        Lion lion = new Lion(felineMock, "Самец");
-        int actual = lion.getKittens();
+        Lion lion = new Lion(felineMock, "Самка");
+        int kittens = lion.getKittens();
 
-        assertEquals(1, actual);
+        assertEquals(3, kittens);
+        verify(felineMock, times(1)).getKittens();
     }
 }
-
-// Sprint 6

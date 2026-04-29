@@ -2,62 +2,60 @@ package com.example;
 
 import org.junit.Test;
 
-import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 public class LionTest {
 
     @Test
-    public void maleLionHasMane() {
-        Feline feline = new Feline("wild");
-        Lion lion = new Lion(feline, "Самец");
-        assertTrue(lion.hasMane());
+    public void maleLionHasManeTest() throws Exception {
+        Predator predator = mock(Predator.class);
+        Lion lion = new Lion(predator, "Самец");
+        assertTrue(lion.doesHaveMane());
     }
 
     @Test
-    public void femaleLionHasNoMane() {
-        Feline feline = new Feline("wild");
-        Lion lion = new Lion(feline, "Самка");
-        assertFalse(lion.hasMane());
+    public void femaleLionHasNoManeTest() throws Exception {
+        Predator predator = mock(Predator.class);
+        Lion lion = new Lion(predator, "Самка");
+        assertFalse(lion.doesHaveMane());
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void invalidGenderThrowsException() {
-        Feline feline = new Feline("wild");
-        new Lion(feline, "Лев");
-    }
-
-    @Test
-    public void getFoodDelegatesToFeline() {
-        Feline feline = new Feline("wild");
-        Lion lion = new Lion(feline, "Самец");
-
-        assertEquals(
-                Arrays.asList("Птица", "Рыба", "Мелкие млекопитающие"),
-                lion.getFood()
-        );
+    @Test(expected = Exception.class)
+    public void invalidSexThrowsExceptionTest() throws Exception {
+        Predator predator = mock(Predator.class);
+        new Lion(predator, "Лев");
     }
 
     @Test
-    public void genderIsNormalizedToTitleCase() {
-        Feline feline = new Feline("wild");
-        Lion lion = new Lion(feline, "сАмеЦ");
+    public void getFoodUsesPredatorEatMeatTest() throws Exception {
+        Predator predator = mock(Predator.class);
+        when(predator.eatMeat()).thenReturn(List.of("Животные"));
 
-        assertEquals("Самец", lion.getGender());
+        Lion lion = new Lion(predator, "Самец");
+
+        assertEquals(List.of("Животные"), lion.getFood());
+        verify(predator, times(1)).eatMeat();
     }
 
     @Test
-    public void descriptionReturnsNonEmptyString() {
-        Feline feline = new Feline("wild");
+    public void getKittensReturnsFelineKittensTest() throws Exception {
+        Feline feline = mock(Feline.class);
+        when(feline.getKittens()).thenReturn(3);
+
         Lion lion = new Lion(feline, "Самец");
 
-        String description = lion.getDescription();
+        assertEquals(3, lion.getKittens());
+        verify(feline, times(1)).getKittens();
+    }
 
-        assertNotNull(description);
-        org.junit.Assert.assertFalse(description.isEmpty());
-        org.junit.Assert.assertTrue(description.contains("Самец"));
+    @Test
+    public void getKittensReturnsZeroForNonFelinePredatorTest() throws Exception {
+        Predator predator = mock(Predator.class);
+        Lion lion = new Lion(predator, "Самец");
+
+        assertEquals(0, lion.getKittens());
     }
 }
-
-// Sprint 6

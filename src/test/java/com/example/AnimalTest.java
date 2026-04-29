@@ -2,27 +2,35 @@ package com.example;
 
 import org.junit.Test;
 
+import java.util.List;
+
 import static org.junit.Assert.assertEquals;
 
 public class AnimalTest {
 
     @Test
-    public void animalHasCorrectFamily() {
+    public void getFoodForHerbivoreReturnsPlantFood() throws Exception {
+        Animal animal = new Animal();
+        List<String> food = animal.getFood("Травоядное");
+        assertEquals(List.of("Трава", "Различные растения"), food);
+    }
+
+    @Test
+    public void getFoodForPredatorReturnsMeatFood() throws Exception {
+        Animal animal = new Animal();
+        List<String> food = animal.getFood("Хищник");
+        assertEquals(List.of("Животные", "Птицы", "Рыба"), food);
+    }
+
+    @Test(expected = Exception.class)
+    public void getFoodThrowsExceptionForUnknownAnimalType() throws Exception {
+        Animal animal = new Animal();
+        animal.getFood("Неизвестное существо");
+    }
+
+    @Test
+    public void getFamilyReturnsAnimalFamily() {
         Animal animal = new Animal();
         assertEquals("Животные", animal.getFamily());
     }
-
-    @Test
-    public void animalHasOneKittenByDefault() {
-        Animal animal = new Animal();
-        assertEquals(1, animal.getKittens());
-    }
-
-    @Test
-    public void animalReturnsCustomKittensCount() {
-        Animal animal = new Animal();
-        assertEquals(5, animal.getKittens(5));
-    }
 }
-
-// Sprint 6 homework

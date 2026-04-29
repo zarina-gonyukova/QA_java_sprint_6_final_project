@@ -4,52 +4,31 @@ import java.util.List;
 
 public class Lion {
 
-    private static final String MALE = "Самец";
-    private static final String FEMALE = "Самка";
+    private final Predator predator;
+    private final boolean hasMane;
 
-    private final String gender;
-    private final Feline feline;
-
-    public Lion(Feline feline, String gender) {
-        if (!isValidGender(gender)) {
-            throw new IllegalArgumentException(
-                    "Пол животного должен быть указан как \"Самец\" или \"Самка\""
+    public Lion(Predator predator, String sex) throws Exception {
+        if (!"Самец".equals(sex) && !"Самка".equals(sex)) {
+            throw new Exception(
+                    "Используйте допустимые значения пола животного - Самец или Самка"
             );
         }
-        this.feline = feline;
-        this.gender = normalizeGender(gender);
+        this.predator = predator;
+        this.hasMane = "Самец".equals(sex);
     }
 
-    private boolean isValidGender(String gender) {
-
-        return MALE.equalsIgnoreCase(gender) || FEMALE.equalsIgnoreCase(gender);
-    }
-
-    private String normalizeGender(String gender) {
-
-        return Character.toUpperCase(gender.charAt(0))
-                + gender.substring(1).toLowerCase();
-    }
-
-    public String getGender() {
-        return gender;
-    }
-
-    public boolean hasMane() {
-        return MALE.equalsIgnoreCase(gender);
+    public boolean doesHaveMane() {
+        return hasMane;
     }
 
     public int getKittens() {
-        return feline.getKittens();
+        if (predator instanceof Feline) {
+            return ((Feline) predator).getKittens();
+        }
+        return 0;
     }
 
-    public List<String> getFood() {
-        return feline.getMeatMenu();
-    }
-
-    public String getDescription() {
-        return "Лев, пол: " + gender + ", хищник, рацион: " + getFood();
+    public List<String> getFood() throws Exception {
+        return predator.eatMeat();
     }
 }
-
-// Sprint 6
